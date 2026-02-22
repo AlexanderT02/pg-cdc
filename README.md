@@ -1,10 +1,10 @@
-#  Postgres → Debezium → Kafka → HTTP Webhook (CDC Demo)
+# CDC Demo
 
-This project demonstrates a complete Change Data Capture (CDC) pipeline:
+This project demonstrates a Change Data Capture (CDC) pipeline:
 
 Postgres → Debezium → Kafka → Kafka Connect → HTTP Webhook
 
-It allows you to capture database changes in real time and send them as
+It allows to capture database changes in real time and send them as
 clean JSON events to an HTTP endpoint.
 
 ------------------------------------------------------------------------
@@ -64,9 +64,9 @@ clean JSON events to an HTTP endpoint.
 5.  HTTP Sink sends POST request to:
 
 ```{=html}
-<!-- -->
-```
     http://webhook:8080
+```
+
 
 ------------------------------------------------------------------------
 
@@ -148,18 +148,23 @@ With body:
 
 ## Event Format
 
-After unwrap transform:
+After the unwrap transform, the database operation is mapped to an event code:
 
-  DB Action   Event
-  ----------- --------------
-  INSERT      "event": "c"
-  UPDATE      "event": "u"
-  DELETE      "event": "d"
+| DB Action | Event |
+|--------|------|
+| INSERT | `"event": "c"` |
+| UPDATE | `"event": "u"` |
+| DELETE | `"event": "d"` |
 
-Example:
+### Example
 
-``` json
-{"id":4,"name":"New","email":"new@test.com","event":"c"}
+```json
+{
+  "id": 4,
+  "name": "New",
+  "email": "new@test.com",
+  "event": "c"
+}
 ```
 
 ------------------------------------------------------------------------
@@ -186,23 +191,6 @@ docker exec -it cdc-pg-kafka-1 kafka-console-consumer  --bootstrap-server kafka:
 docker logs -f cdc-pg-webhook-1
 ```
 
-------------------------------------------------------------------------
-
-## Final Result
-
-You now have a working real-time CDC pipeline:
-
-Database Change\
-→ Kafka Event\
-→ Clean JSON\
-→ HTTP Webhook
-
-This setup is suitable for:
-
--   Microservices synchronization
--   ERP / Shop integration
--   Webhook-driven architectures
--   Event-driven systems
 
 
 
