@@ -1,0 +1,28 @@
+{
+  "name": "pg-cdc",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "database.hostname": "postgres",
+    "database.port": "5432",
+    "database.user": "postgres",
+    "database.password": "postgres",
+    "database.dbname": "app",
+
+    "topic.prefix": "pg",
+    "slot.name": "debezium",
+    "publication.autocreate.mode": "filtered",
+    "plugin.name": "pgoutput",
+    "table.include.list": "public.customers",
+
+    "tombstones.on.delete": "false",
+
+    "transforms": "unwrap,rename",
+    "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+    "transforms.unwrap.drop.tombstones": "true",
+    "transforms.unwrap.delete.handling.mode": "rewrite",
+    "transforms.unwrap.add.fields": "op",
+
+    "transforms.rename.type": "org.apache.kafka.connect.transforms.ReplaceField$Value",
+    "transforms.rename.renames": "__op:event"
+  }
+}

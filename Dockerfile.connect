@@ -1,0 +1,11 @@
+FROM confluentinc/cp-kafka-connect:7.5.0
+
+USER root
+
+# Postgres CDC
+RUN confluent-hub install --no-prompt debezium/debezium-connector-postgresql:2.5.4
+
+# HTTP Sink
+RUN confluent-hub install --no-prompt confluentinc/kafka-connect-http:1.7.4
+
+USER appuser
